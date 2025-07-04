@@ -385,6 +385,155 @@
             transform: translateY(-2px);
         }
 
+        /* Custom Design Options Styles */
+        .custom-design-options {
+            margin-bottom: 25px;
+        }
+
+        .custom-design-options h4 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .custom-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .custom-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .custom-option input[type="radio"] {
+            opacity: 0;
+            position: absolute;
+        }
+
+        .custom-option label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin: 0;
+        }
+
+        .option-icon {
+            font-size: 24px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option-text strong {
+            display: block;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .option-text small {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .custom-option input[type="radio"]:checked + label {
+            color: #ff6b6b;
+        }
+
+        .custom-option input[type="radio"]:checked + label .option-icon {
+            transform: scale(1.1);
+        }
+
+        .custom-option input[type="radio"]:checked + label .option-text strong {
+            color: #ff6b6b;
+        }
+
+        /* Custom Input Sections */
+        .custom-input-section {
+            margin-top: 20px;
+        }
+
+        /* Custom Upload Area Styles */
+        .custom-upload-area {
+            position: relative;
+        }
+
+        .custom-upload-area input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .custom-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            border: 3px dashed #ff6b6b;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #fff5f5, #ffffff);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .custom-upload-label:hover {
+            border-color: #ff8e8e;
+            background: linear-gradient(145deg, #fff0f0, #ffffff);
+            transform: translateY(-2px);
+        }
+
+        .custom-upload-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .custom-preview-item {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .custom-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .custom-preview-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -1045,8 +1194,55 @@
                         
                         <!-- Custom Design Input (shows when Custom is selected) -->
                         <div id="customDesignSection" class="custom-design-section" style="display: none;">
-                            <label for="customDesign">Describe your custom keychain design:</label>
-                            <textarea id="customDesign" name="customDesign" placeholder="Tell us about your custom keychain! What design, colors, or special features does it have? 🎨✨" rows="3"></textarea>
+                            <div class="custom-design-options">
+                                <h4>🎨 How would you like to share your custom design?</h4>
+                                
+                                <!-- Option 1: Describe -->
+                                <div class="custom-option">
+                                    <input type="radio" id="describeOption" name="customMethod" value="describe" checked>
+                                    <label for="describeOption">
+                                        <span class="option-icon">✍️</span>
+                                        <span class="option-text">
+                                            <strong>Describe it</strong><br>
+                                            <small>Tell us about your design in words</small>
+                                        </span>
+                                    </label>
+                                </div>
+                                
+                                <!-- Option 2: Upload Picture -->
+                                <div class="custom-option">
+                                    <input type="radio" id="uploadOption" name="customMethod" value="upload">
+                                    <label for="uploadOption">
+                                        <span class="option-icon">📷</span>
+                                        <span class="option-text">
+                                            <strong>Upload a picture</strong><br>
+                                            <small>Show us your keychain design</small>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Describe Section -->
+                            <div id="describeSection" class="custom-input-section">
+                                <label for="customDesign">Describe your custom keychain design:</label>
+                                <textarea id="customDesign" name="customDesign" placeholder="Tell us about your custom keychain! What design, colors, or special features does it have? 🎨✨" rows="3"></textarea>
+                            </div>
+                            
+                            <!-- Upload Section -->
+                            <div id="uploadSection" class="custom-input-section" style="display: none;">
+                                <label for="customDesignPhoto">Upload a photo of your custom keychain:</label>
+                                <div class="custom-upload-area">
+                                    <input type="file" id="customDesignPhoto" name="customDesignPhoto" accept="image/*">
+                                    <label for="customDesignPhoto" class="custom-upload-label">
+                                        <div class="upload-icon">📸</div>
+                                        <div class="upload-text">
+                                            <strong>Click to upload photo</strong><br>
+                                            <span>Show us your beautiful custom keychain! (Max 5MB)</span>
+                                        </div>
+                                    </label>
+                                    <div id="customUploadPreview" class="custom-upload-preview"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1640,9 +1836,21 @@
                     </div>
                     ${formData.customDesign ? `
                     <div class="data-preview-item">
+                        <span class="data-preview-label">Custom Design Method:</span>
+                        <span class="data-preview-value">${formData.customMethod === 'describe' ? 'Description' : 'Photo Upload'}</span>
+                    </div>
+                    ${formData.customMethod === 'describe' ? `
+                    <div class="data-preview-item">
                         <span class="data-preview-label">Custom Design Details:</span>
                         <span class="data-preview-value">${formData.customDesign}</span>
                     </div>
+                    ` : ''}
+                    ${formData.customMethod === 'upload' ? `
+                    <div class="data-preview-item">
+                        <span class="data-preview-label">Custom Design Photos:</span>
+                        <span class="data-preview-value">${formData.customPhotoCount} photo(s) uploaded</span>
+                    </div>
+                    ` : ''}
                     ` : ''}
                     <div class="data-preview-item">
                         <span class="data-preview-label">Quality:</span>
@@ -1763,13 +1971,27 @@
         function collectFormData() {
             const selectedProduct = document.querySelector('input[name="product"]:checked')?.value || '';
             const customDesign = document.getElementById('customDesign').value;
+            const customMethod = document.querySelector('input[name="customMethod"]:checked')?.value || '';
+            const customPhotoInput = document.getElementById('customDesignPhoto');
+            
+            let customDesignInfo = '';
+            if (selectedProduct === '6') {
+                if (customMethod === 'describe') {
+                    customDesignInfo = `Description: ${customDesign}`;
+                } else if (customMethod === 'upload') {
+                    const files = Array.from(customPhotoInput.files);
+                    customDesignInfo = `Photo uploaded: ${files.length} file(s) - ${files.map(f => f.name).join(', ')}`;
+                }
+            }
             
             return {
                 timestamp: new Date().toISOString(),
                 overall: document.querySelector('input[name="overall"]:checked')?.value || '',
                 product: selectedProduct,
-                productName: selectedProduct === '6' ? `Custom Design: ${customDesign}` : (productMap[selectedProduct]?.name || 'Unknown'),
+                productName: selectedProduct === '6' ? `Custom Design: ${customDesignInfo}` : (productMap[selectedProduct]?.name || 'Unknown'),
                 customDesign: selectedProduct === '6' ? customDesign : '',
+                customMethod: selectedProduct === '6' ? customMethod : '',
+                customPhotoCount: selectedProduct === '6' && customMethod === 'upload' ? customPhotoInput.files.length : 0,
                 quality: document.querySelector('input[name="quality"]:checked')?.value || '',
                 shipping: document.querySelector('input[name="shipping"]:checked')?.value || '',
                 packaging: document.querySelector('input[name="packaging"]:checked')?.value || '',
@@ -1903,20 +2125,107 @@
             const productRadios = document.querySelectorAll('input[name="product"]');
             const customSection = document.getElementById('customDesignSection');
             const customTextarea = document.getElementById('customDesign');
+            const customPhotoInput = document.getElementById('customDesignPhoto');
             
+            // Handle product selection
             productRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     if (this.value === '6') { // Custom design selected
                         customSection.style.display = 'block';
-                        customTextarea.required = true;
+                        updateCustomRequirements();
                     } else {
                         customSection.style.display = 'none';
                         customTextarea.required = false;
+                        customPhotoInput.required = false;
                         customTextarea.value = '';
+                        document.getElementById('customUploadPreview').innerHTML = '';
                     }
                     updateProgress();
                 });
             });
+            
+            // Handle custom method selection
+            const describeOption = document.getElementById('describeOption');
+            const uploadOption = document.getElementById('uploadOption');
+            const describeSection = document.getElementById('describeSection');
+            const uploadSection = document.getElementById('uploadSection');
+            
+            describeOption.addEventListener('change', function() {
+                describeSection.style.display = 'block';
+                uploadSection.style.display = 'none';
+                updateCustomRequirements();
+            });
+            
+            uploadOption.addEventListener('change', function() {
+                describeSection.style.display = 'none';
+                uploadSection.style.display = 'block';
+                updateCustomRequirements();
+            });
+            
+            // Initialize custom photo upload
+            handleCustomPhotoUpload();
+        }
+        
+        // Update custom requirements based on selected method
+        function updateCustomRequirements() {
+            const describeOption = document.getElementById('describeOption');
+            const customTextarea = document.getElementById('customDesign');
+            const customPhotoInput = document.getElementById('customDesignPhoto');
+            
+            if (describeOption.checked) {
+                customTextarea.required = true;
+                customPhotoInput.required = false;
+            } else {
+                customTextarea.required = false;
+                customPhotoInput.required = true;
+            }
+            updateProgress();
+        }
+        
+        // Handle custom photo upload
+        function handleCustomPhotoUpload() {
+            const fileInput = document.getElementById('customDesignPhoto');
+            const preview = document.getElementById('customUploadPreview');
+            
+            fileInput.addEventListener('change', function(e) {
+                preview.innerHTML = '';
+                const files = Array.from(e.target.files);
+                
+                files.forEach((file, index) => {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        showMessage('error', `File ${file.name} is too large. Maximum size is 5MB.`);
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'custom-preview-item';
+                        previewItem.innerHTML = `
+                            <img src="${e.target.result}" alt="Custom Design Preview">
+                            <button class="custom-preview-remove" onclick="removeCustomFile(${index})">×</button>
+                        `;
+                        preview.appendChild(previewItem);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+        
+        // Remove custom file from preview
+        function removeCustomFile(index) {
+            const fileInput = document.getElementById('customDesignPhoto');
+            const dt = new DataTransfer();
+            const files = Array.from(fileInput.files);
+            
+            files.forEach((file, i) => {
+                if (i !== index) {
+                    dt.items.add(file);
+                }
+            });
+            
+            fileInput.files = dt.files;
+            handleCustomPhotoUpload(); // Re-render preview
         }
     </script>
 </body>
