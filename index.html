@@ -345,6 +345,57 @@
             text-decoration: underline;
         }
 
+        /* Custom Design Section Styles */
+        .custom-design-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(145deg, #fff5f5, #ffffff);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 107, 107, 0.2);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .custom-design-section label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+            font-size: 16px;
+        }
+
+        .custom-design-section textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(145deg, #fafafa, #ffffff);
+            line-height: 1.5;
+        }
+
+        .custom-design-section textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.15);
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Social Sharing Styles */
         .social-sharing {
             margin-top: 40px;
@@ -975,6 +1026,12 @@
                                         <div class="rating-circle">🦄</div>
                                     </label>
                                 </div>
+                                <div class="rating-option">
+                                    <input type="radio" id="product6" name="product" value="6">
+                                    <label for="product6">
+                                        <div class="rating-circle">✨</div>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="scale-labels">
@@ -983,6 +1040,13 @@
                             <span>Star</span>
                             <span>Heart</span>
                             <span>Unicorn</span>
+                            <span>Custom</span>
+                        </div>
+                        
+                        <!-- Custom Design Input (shows when Custom is selected) -->
+                        <div id="customDesignSection" class="custom-design-section" style="display: none;">
+                            <label for="customDesign">Describe your custom keychain design:</label>
+                            <textarea id="customDesign" name="customDesign" placeholder="Tell us about your custom keychain! What design, colors, or special features does it have? 🎨✨" rows="3"></textarea>
                         </div>
                     </div>
 
@@ -1289,7 +1353,8 @@
             '2': { name: 'Flower Keychain', emoji: '🌸' },
             '3': { name: 'Star Keychain', emoji: '⭐' },
             '4': { name: 'Heart Keychain', emoji: '💖' },
-            '5': { name: 'Unicorn Keychain', emoji: '🦄' }
+            '5': { name: 'Unicorn Keychain', emoji: '🦄' },
+            '6': { name: 'Custom Design', emoji: '✨' }
         };
 
         // Create floating hearts background
@@ -1571,8 +1636,14 @@
                     </div>
                     <div class="data-preview-item">
                         <span class="data-preview-label">Product:</span>
-                        <span class="data-preview-value">${formData.productName} ${formData.product}</span>
+                        <span class="data-preview-value">${formData.productName}</span>
                     </div>
+                    ${formData.customDesign ? `
+                    <div class="data-preview-item">
+                        <span class="data-preview-label">Custom Design Details:</span>
+                        <span class="data-preview-value">${formData.customDesign}</span>
+                    </div>
+                    ` : ''}
                     <div class="data-preview-item">
                         <span class="data-preview-label">Quality:</span>
                         <span class="data-preview-value">${formData.quality}/5</span>
@@ -1690,11 +1761,15 @@
 
         // Collect form data function
         function collectFormData() {
+            const selectedProduct = document.querySelector('input[name="product"]:checked')?.value || '';
+            const customDesign = document.getElementById('customDesign').value;
+            
             return {
                 timestamp: new Date().toISOString(),
                 overall: document.querySelector('input[name="overall"]:checked')?.value || '',
-                product: document.querySelector('input[name="product"]:checked')?.value || '',
-                productName: productMap[document.querySelector('input[name="product"]:checked')?.value]?.name || 'Unknown',
+                product: selectedProduct,
+                productName: selectedProduct === '6' ? `Custom Design: ${customDesign}` : (productMap[selectedProduct]?.name || 'Unknown'),
+                customDesign: selectedProduct === '6' ? customDesign : '',
                 quality: document.querySelector('input[name="quality"]:checked')?.value || '',
                 shipping: document.querySelector('input[name="shipping"]:checked')?.value || '',
                 packaging: document.querySelector('input[name="packaging"]:checked')?.value || '',
@@ -1783,6 +1858,9 @@
             // Initialize file upload
             handleFileUpload();
             
+            // Initialize custom design functionality
+            initializeCustomDesign();
+            
             // Add event listeners for all form inputs
             const formInputs = document.querySelectorAll('input, textarea');
             formInputs.forEach(input => {
@@ -1819,6 +1897,27 @@
             // Initial progress update
             updateProgress();
         });
+
+        // Initialize custom design functionality
+        function initializeCustomDesign() {
+            const productRadios = document.querySelectorAll('input[name="product"]');
+            const customSection = document.getElementById('customDesignSection');
+            const customTextarea = document.getElementById('customDesign');
+            
+            productRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === '6') { // Custom design selected
+                        customSection.style.display = 'block';
+                        customTextarea.required = true;
+                    } else {
+                        customSection.style.display = 'none';
+                        customTextarea.required = false;
+                        customTextarea.value = '';
+                    }
+                    updateProgress();
+                });
+            });
+        }
     </script>
 </body>
 </html>
