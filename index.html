@@ -936,6 +936,25 @@
             transform: none;
         }
 
+        .test-btn {
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            margin-left: 15px;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
         .thank-you {
             text-align: center;
             font-style: italic;
@@ -1497,6 +1516,7 @@
 
                 <div class="submit-section">
                     <button type="submit" class="submit-btn">Submit Feedback 💫</button>
+                    <button type="button" class="test-btn" onclick="testConnection()">Test Connection 🔧</button>
                     <p class="thank-you">Thank you for choosing us! We appreciate your business 🥰</p>
                     
                     <!-- Social Sharing -->
@@ -1541,7 +1561,7 @@
 
     <script>
         // Enhanced Google Apps Script URL (replace with your actual URL)
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyaYE3mdJrlmAwZFtC6_HUz2Vqjj27M-iZ2NLiMgKv8IYZI4u-UJZBumMskj-xH5u1MXA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMvN2BQ0hEuMy_di4ITxpk4VMcGqylYkeHkLmvVwYZ0-9aIXAQXrQvD-tIe9LjbG7XlA/exec';
         
         // Product mapping
         const productMap = {
@@ -2044,7 +2064,17 @@
             })
             .catch((error) => {
                 console.error('Error details:', error);
-                showMessage('error', 'Failed to submit feedback. Please check console for details! 😞');
+                let errorMessage = 'Failed to submit feedback. ';
+                
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorMessage += 'Network error - please check your internet connection.';
+                } else if (error.message.includes('CORS')) {
+                    errorMessage += 'CORS error - the server is not responding properly.';
+                } else {
+                    errorMessage += 'Please check console for details.';
+                }
+                
+                showMessage('error', errorMessage + ' 😞');
                 closeDataPreview();
             });
         }
@@ -2230,6 +2260,49 @@
             
             fileInput.files = dt.files;
             handleCustomPhotoUpload(); // Re-render preview
+        }
+
+        // Test connection to Google Apps Script
+        function testConnection() {
+            console.log('Testing connection to:', GOOGLE_SCRIPT_URL);
+            
+            // Test with a simple GET request first
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'GET',
+                mode: 'no-cors'
+            })
+            .then(() => {
+                console.log('GET request successful');
+                showMessage('success', 'Connection test successful! Your script is accessible. ✅');
+            })
+            .catch((error) => {
+                console.error('GET test failed:', error);
+                showMessage('error', 'Connection test failed. Please check your Google Apps Script setup. ❌');
+            });
+            
+            // Test with a simple POST request
+            const testData = {
+                timestamp: new Date().toISOString(),
+                test: true,
+                message: 'This is a test submission'
+            };
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(testData)
+            })
+            .then(() => {
+                console.log('POST test successful');
+                showMessage('success', 'POST test successful! Data can be sent to your script. ✅');
+            })
+            .catch((error) => {
+                console.error('POST test failed:', error);
+                showMessage('error', 'POST test failed. Check your script permissions and deployment. ❌');
+            });
         }
     </script>
 </body>
