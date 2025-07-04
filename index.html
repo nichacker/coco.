@@ -1541,7 +1541,7 @@
 
     <script>
         // Enhanced Google Apps Script URL (replace with your actual URL)
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKpSmxCixQXmBoo8DztQQ_HimebmKIh8lkdy-SMguLUg8I0Fv1rVuSPulefc-SkB7zhQ/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyaYE3mdJrlmAwZFtC6_HUz2Vqjj27M-iZ2NLiMgKv8IYZI4u-UJZBumMskj-xH5u1MXA/exec';
         
         // Product mapping
         const productMap = {
@@ -2012,6 +2012,9 @@
             const formData = collectFormData();
             
             // Send data to Google Sheets
+            console.log('Sending data to:', GOOGLE_SCRIPT_URL);
+            console.log('Data being sent:', formData);
+            
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -2020,7 +2023,8 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(() => {
+            .then((response) => {
+                console.log('Response received:', response);
                 // Success - show success message
                 showMessage('success');
                 
@@ -2039,8 +2043,8 @@
                 }
             })
             .catch((error) => {
-                console.error('Error:', error);
-                showMessage('error', 'Failed to submit feedback. Please try again! 😞');
+                console.error('Error details:', error);
+                showMessage('error', 'Failed to submit feedback. Please check console for details! 😞');
                 closeDataPreview();
             });
         }
