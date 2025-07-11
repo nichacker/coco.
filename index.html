@@ -1561,7 +1561,7 @@
 
     <script>
         // Enhanced Google Apps Script URL (replace with your actual URL)
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMvN2BQ0hEuMy_di4ITxpk4VMcGqylYkeHkLmvVwYZ0-9aIXAQXrQvD-tIe9LjbG7XlA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7tfS7u5bUlOkOuxlcAWJFqRvzE1b_aSYfCjq2n0quUmCA5h83chQan5qBsij5C-7k/exec';
         
         // Product mapping
         const productMap = {
@@ -1937,7 +1937,6 @@
                         <h4>📸 Uploaded Images (${fileInput.files.length} files)</h4>
                         <div class="uploaded-images">
                 `;
-                
                 Array.from(fileInput.files).forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -1946,7 +1945,6 @@
                         img.className = 'uploaded-image';
                         img.alt = `Image ${index + 1}`;
                         img.title = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-                        
                         const container = document.querySelector('.uploaded-images');
                         if (container) {
                             container.appendChild(img);
@@ -1954,7 +1952,32 @@
                     };
                     reader.readAsDataURL(file);
                 });
-                
+                html += `</div></div>`;
+            }
+
+            // Custom Design Photo Section (show preview if present)
+            const customPhotoInput = document.getElementById('customDesignPhoto');
+            if (customPhotoInput && customPhotoInput.files.length > 0) {
+                html += `
+                    <div class="data-preview-section">
+                        <h4>🎨 Custom Design Image (${customPhotoInput.files.length} file(s))</h4>
+                        <div class="uploaded-images">
+                `;
+                Array.from(customPhotoInput.files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'uploaded-image';
+                        img.alt = `Custom Design ${index + 1}`;
+                        img.title = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                        const container = document.querySelectorAll('.uploaded-images');
+                        if (container.length > 0) {
+                            container[container.length - 1].appendChild(img);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
                 html += `</div></div>`;
             }
             
